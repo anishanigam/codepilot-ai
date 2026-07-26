@@ -61,10 +61,7 @@ class GitHubClient:
             "https://github.com/login/oauth/authorize?"
             + urlencode(params)
         )
-        
-
-    async def close(self):
-        await self.client.aclose()
+    
 
     async def get_repositories(self, access_token: str):
         response = await self.client.get(
@@ -81,6 +78,28 @@ class GitHubClient:
 
         response.raise_for_status()
         return response.json()    
+
+
+    async def get_pull_requests(
+        self,
+        access_token: str,
+        owner: str,
+        repo: str,
+    ):
+        response = await self.client.get(
+            f"https://api.github.com/repos/{owner}/{repo}/pulls",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/vnd.github+json",
+            },
+        )
+
+        response.raise_for_status()
+        return response.json()
+
+    
+    async def close(self):
+        await self.client.aclose()
 
 
 

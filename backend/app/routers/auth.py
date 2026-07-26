@@ -25,10 +25,8 @@ async def github_callback(
 ):
     result = await auth_service.authenticate_with_github(code)
 
-    response = JSONResponse(
-        content={
-            "message": "Authentication successful",
-        }
+    response = RedirectResponse(
+        url=f"{settings.FRONTEND_URL}/dashboard"
     )
 
 

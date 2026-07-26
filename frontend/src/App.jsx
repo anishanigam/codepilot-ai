@@ -5,6 +5,8 @@ import Dashboard from "./pages/Dashboard";
 
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Repositories from "./pages/Repositories";
+import RepositoryDetails from "./pages/RepositoryDetails";
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
       >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/repositories" element={<Repositories />} />
+        <Route path="/repositories/:owner/:repo" element={<RepositoryDetails />}/>
       </Route>
     </Routes>
   );
