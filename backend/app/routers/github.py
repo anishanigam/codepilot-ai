@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends #type:ignore
 
 from app.dependencies.auth import get_current_user
 from app.github.github_service import github_service

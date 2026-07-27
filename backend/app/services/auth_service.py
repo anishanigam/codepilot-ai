@@ -5,26 +5,46 @@ from app.core.security import create_access_token
 
 class AuthService:
 
-    def get_github_login_url(self):
+    PUBLIC_SCOPE = "read:user user:email public_repo"
 
-        return github_client.get_authorization_url()
+    PRIVATE_SCOPE = "read:user user:email repo"
+
+    def get_github_login_url(self):
+        return github_client.get_authorization_url(
+            scope=self.PUBLIC_SCOPE,
+            state="login",
+        )
     
+    async def github_private_login(self):
+        return github_client.get_authorization_url(
+            scope = self.PRIVATE_SCOPE,
+            state="private_access"
+        )
 
     async def authenticate_with_github(self, code: str,):
         token_data = await github_client.exchange_code_for_token(code)
+        print("✅ Token received")
 
         if "access_token" not in token_data:
             raise Exception(f"GitHub OAuth failed: {token_data}")
 
         access_token = token_data["access_token"]
 
+        print("Fetching GitHub user...")
+
         github_user = await github_client.get_authenticated_user(
             access_token
         )
+        print("✅ User fetched")
+
+        github_scopes = await github_client.get_github_scopes(
+        access_token
+    )
 
         user = await user_repository.upsert_user(
-            github_user,
-            access_token,
+            github_user=github_user,
+            access_token=access_token,
+            github_scopes=github_scopes,
         )
 
         jwt_token = create_access_token(user)

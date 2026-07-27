@@ -58,11 +58,12 @@ class GitHubClient:
         return response.json()
     
 
-    def get_authorization_url(self):
+    def get_authorization_url(self, scope: str, state: str):
 
         params = {
            "client_id": self.client_id,
-            "scope": "read:user user:email",
+            "scope": scope,
+            "state" : state
         }
 
         return (
@@ -104,6 +105,25 @@ class GitHubClient:
 
         response.raise_for_status()
         return response.json()
+
+    async def get_github_scopes(self, access_token: str):
+        response = await self.client.get(
+        "https://api.github.com/user",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Accept": "application/vnd.github+json",
+        },
+    )
+
+        response.raise_for_status()
+
+        scopes = response.headers.get("X-OAuth-Scopes", "")
+
+        return [
+        scope.strip()
+        for scope in scopes.split(",")
+        if scope.strip()
+    ]
 
     
     async def close(self):
