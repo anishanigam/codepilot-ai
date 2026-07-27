@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 function RepositoryDetails() {
   const { owner, repo } = useParams();
@@ -30,10 +31,11 @@ function RepositoryDetails() {
           <p>No open pull requests.</p>
         ) : (
           pullRequests.map((pr) => (
-            <div
-              key={pr.number}
-              className="rounded-lg border bg-white p-4 shadow"
-            >
+            <Link
+                key={pr.number}
+                to={`/repositories/${owner}/${repo}/pulls/${pr.number}`}
+                className="block rounded-lg border bg-white p-4 shadow transition hover:shadow-md"
+              >
               <h3 className="font-semibold">
                 #{pr.number} {pr.title}
               </h3>
@@ -41,7 +43,7 @@ function RepositoryDetails() {
               <p className="text-sm text-gray-500">
                 By {pr.author}
               </p>
-            </div>
+            </Link>
           ))
         )}
       </div>

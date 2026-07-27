@@ -106,6 +106,25 @@ class GitHubClient:
         response.raise_for_status()
         return response.json()
 
+    async def get_pull_request_details(
+        self,
+        access_token: str,
+        owner: str,
+        repo: str,
+        pull_number: int,
+    ):
+        response = await self.client.get(
+            f"{self.BASE_API_URL}/repos/{owner}/{repo}/pulls/{pull_number}",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/vnd.github+json",
+            },
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+    
     async def get_github_scopes(self, access_token: str):
         response = await self.client.get(
         "https://api.github.com/user",

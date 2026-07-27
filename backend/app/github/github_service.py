@@ -44,6 +44,41 @@ class GitHubService:
             }
         for pr in pulls
     ]
+
+    async def get_pull_request_details(
+        self,
+        access_token: str,
+        owner: str,
+        repo: str,
+        pull_number: int,
+    ):
+        pr = await github_client.get_pull_request_details(
+            access_token,
+            owner,
+            repo,
+            pull_number,
+        )
+
+        return {
+            "number": pr["number"],
+            "title": pr["title"],
+            "body": pr["body"],
+            "state": pr["state"],
+            "draft": pr["draft"],
+            "merged": pr["merged"],
+            "created_at": pr["created_at"],
+            "updated_at": pr["updated_at"],
+            "additions": pr["additions"],
+            "deletions": pr["deletions"],
+            "changed_files": pr["changed_files"],
+            "commits": pr["commits"],
+            "base_branch": pr["base"]["ref"],
+            "head_branch": pr["head"]["ref"],
+            "author": {
+                "login": pr["user"]["login"],
+                "avatar_url": pr["user"]["avatar_url"],
+            },
+        }
     
     
 
