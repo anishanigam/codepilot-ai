@@ -22,18 +22,26 @@ class GitHubClient:
 
     async def exchange_code_for_token(self, code: str):
 
-      response = await self.client.post(
-        self.OAUTH_URL,
-        json={
-            "client_id": self.client_id,
-            "client_secret": self.client_secret,
-            "code": code,
-        },
-      )
+        try:
+            response = await self.client.post(
+            self.OAUTH_URL,
+            json={
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+                "code": code,
+            },
+        )
+            
+        except Exception as e:
+            print("EXCEPTION:", type(e).__name__)
+            print(e)
+            raise
 
-      response.raise_for_status()
-
-      return response.json()
+        response.raise_for_status()
+        
+        data = response.json()
+        return data
+   
 
 
     async def get_authenticated_user(self,access_token: str,):
