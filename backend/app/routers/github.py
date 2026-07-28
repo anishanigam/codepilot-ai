@@ -38,3 +38,18 @@ async def get_pull_request_details(
         repo,
         pull_number,
     )
+
+
+@router.get("/repositories/{owner}/{repo}/pulls/{pull_number}/files")
+async def get_pull_request_files(
+    owner: str,
+    repo: str,
+    pull_number: int,
+    current_user=Depends(get_current_user),
+):
+    return await github_service.get_pull_request_files(
+        current_user["github_access_token"],
+        owner,
+        repo,
+        pull_number,
+    )

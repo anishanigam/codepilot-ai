@@ -144,7 +144,27 @@ class GitHubClient:
         if scope.strip()
     ]
 
-    
+
+    async def get_pull_request_files(
+        self,
+        access_token: str,
+        owner: str,
+        repo: str,
+        pull_number: int,
+    ):
+        response = await self.client.get(
+            f"{self.BASE_API_URL}/repos/{owner}/{repo}/pulls/{pull_number}/files",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/vnd.github+json",
+            },
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+
+   
     async def close(self):
         await self.client.aclose()
 

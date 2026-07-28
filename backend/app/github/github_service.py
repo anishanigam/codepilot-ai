@@ -79,6 +79,33 @@ class GitHubService:
                 "avatar_url": pr["user"]["avatar_url"],
             },
         }
+
+
+    async def get_pull_request_files(
+        self,
+        access_token: str,
+        owner: str,
+        repo: str,
+        pull_number: int,
+    ):
+        files = await github_client.get_pull_request_files(
+            access_token,
+            owner,
+            repo,
+            pull_number,
+        )
+
+        return [
+            {
+                "filename": file["filename"],
+                "status": file["status"],
+                "additions": file["additions"],
+                "deletions": file["deletions"],
+                "changes": file["changes"],
+                "patch": file.get("patch"),
+            }
+            for file in files
+    ]
     
     
 

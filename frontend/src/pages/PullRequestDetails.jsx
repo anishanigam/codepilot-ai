@@ -10,7 +10,18 @@ function PullRequestDetails() {
     queryKey: ["pull-request", owner, repo, pullNumber],
     queryFn: async () => {
       const response = await api.get(
-        `/api/github/repositories/${owner}/${repo}/pulls/${pullNumber}`
+        `/api/github/repositories/${owner}/${repo}/pulls/${pullNumber}`,
+      );
+
+      return response.data;
+    },
+  });
+
+  const { data: files = [] } = useQuery({
+    queryKey: ["pull-request-files", owner, repo, pullNumber],
+    queryFn: async () => {
+      const response = await api.get(
+        `/api/github/repositories/${owner}/${repo}/pulls/${pullNumber}/files`,
       );
 
       return response.data;
@@ -23,17 +34,11 @@ function PullRequestDetails() {
 
   return (
     <>
-      <h2 className="text-3xl font-bold">
-        PR #{pr.number}
-      </h2>
+      <h2 className="text-3xl font-bold">PR #{pr.number}</h2>
 
-      <h3 className="mt-4 text-2xl font-semibold">
-        {pr.title}
-      </h3>
+      <h3 className="mt-4 text-2xl font-semibold">{pr.title}</h3>
 
-      <p className="mt-2 text-gray-500">
-        By {pr.author.login}
-      </p>
+      <p className="mt-2 text-gray-500">By {pr.author.login}</p>
 
       <div className="mt-6 rounded-lg border bg-white p-6">
         <p>
@@ -65,19 +70,53 @@ function PullRequestDetails() {
         </p>
       </div>
 
+              {/* DESCRIPTION SECTION */}
       <div className="mt-8 rounded-lg border bg-white p-6">
-        <h3 className="mb-4 text-xl font-semibold">
-          Description
-        </h3>
+        <h3 className="mb-4 text-xl font-semibold">Description</h3>
 
         <p className="whitespace-pre-wrap">
           {pr.body || "No description provided."}
         </p>
       </div>
 
-      <button
-        className="mt-8 rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
-      >
+            {/* CHANGED FILES SECTION */}
+      <div className="mt-8 rounded-lg border bg-white p-6">
+        <h3 className="mb-4 text-xl font-semibold">
+          Changed Files ({files.length})
+        </h3>
+
+        <div className="space-y-4">
+          {files.map((file) => (
+            <div key={file.filename} className="rounded-lg border p-4">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium">{file.filename}</h4>
+
+                <span className="text-sm text-gray-500">{file.status}</span>
+              </div>
+
+              <div className="mt-2 flex gap-4 text-sm">
+                <span className="text-green-600">+{file.additions}</span>
+
+                <span className="text-red-600">-{file.deletions}</span>
+
+                <span>{file.changes} changes</span>
+              </div>
+
+              {file.patch ? (
+                <pre className="mt-4 overflow-x-auto rounded bg-gray-100 p-4 text-xs whitespace-pre-wrap">
+                  {file.patch}
+                </pre>
+              ) : (
+                <p className="mt-4 text-sm text-gray-500">
+                  No textual diff available (binary or unsupported file).
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button className="mt-8 rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800">
         🤖 Review with AI
       </button>
     </>
