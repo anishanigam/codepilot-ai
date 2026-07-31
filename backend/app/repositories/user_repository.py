@@ -19,7 +19,12 @@ class UserRepository:
         }
     )
 
-    async def upsert_user(self, github_user: dict,access_token: str,):
+    async def upsert_user(
+            self, 
+            github_user: dict,
+            access_token: str,
+            github_scopes: list[str],
+        ):
 
         now = datetime.now(timezone.utc)
 
@@ -34,6 +39,7 @@ class UserRepository:
                 "email": github_user.get("email"),
                 "avatar_url": github_user["avatar_url"],
                 "github_access_token": access_token,
+                "github_scopes": github_scopes,
                 "updated_at": now,
             },
             "$setOnInsert": {

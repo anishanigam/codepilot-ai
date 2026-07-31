@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Query, Depends
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi import APIRouter, Query, Depends, HTTPException #type:ignore
+from fastapi.responses import RedirectResponse, JSONResponse #type:ignore
 from app.core.config import settings
 
 from app.dependencies.auth import get_current_user
@@ -19,15 +19,35 @@ async def github_login():
     return RedirectResponse(url=url)
 
 
+@router.get("/github/login/private")
+async def github_private_login():
+    url = await auth_service.github_private_login()
+    return RedirectResponse(url)
+
+
 @router.get("/github/callback")
 async def github_callback(
-    code: str = Query(...)
+    code: str = Query(...),
+    state: str = Query(...),
 ):
+    VALID_STATES = {
+        "login",
+        "private_access",
+    }
+
+    if state not in VALID_STATES:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid OAuth state",
+        )
     result = await auth_service.authenticate_with_github(code)
 
-    response = RedirectResponse(
-        url=f"{settings.FRONTEND_URL}/dashboard"
-    )
+    if state == "login":
+        redirect_url = f"{settings.FRONTEND_URL}/dashboard"
+    else:
+        redirect_url = f"{settings.FRONTEND_URL}/repositories"
+
+    response = RedirectResponse(url=redirect_url)
 
 
     response.set_cookie(
@@ -52,6 +72,7 @@ async def get_me(
         "username": current_user["username"],
         "name": current_user["name"],
         "avatar_url": current_user["avatar_url"],
+        "has_private_repo_access": "repo" in current_user.get("github_scopes", []),
     }
 
 
