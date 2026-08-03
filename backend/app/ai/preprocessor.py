@@ -11,6 +11,7 @@ from app.ai.constants import (
 )
 from app.ai.models import (
     GitHubFile,
+    PatchChunk,
     ReviewableFile,
     SkippedFile,
     ReviewStatistics,
@@ -230,9 +231,10 @@ class ReviewPreprocessor:
 
     def chunk_patch(
         self,
+        filename: str,
         patch: str,
         language: str,
-    ) -> list[str]:
+    ) -> list[PatchChunk]:
             """
             Convert a git patch into AI-ready chunks.
         
@@ -250,18 +252,28 @@ class ReviewPreprocessor:
         
             hunks = self.split_into_hunks(patch)
         
-            chunks = []
+            raw_chunks = []
         
             for hunk in hunks:
             
-                chunks.extend(
+                raw_chunks.extend(
                     self.split_large_hunk(
                         hunk,
                         language,
                     )
                 )
         
-            return chunks
+            total_chunks = len(raw_chunks)
+
+            return [
+                PatchChunk(
+                    chunk_id=f"{filename}_{index + 1}",
+                    chunk_number=index + 1,
+                    total_chunks=total_chunks,
+                    content=chunk,
+                )
+                for index, chunk in enumerate(raw_chunks)
+            ]
     
 
     def process(
@@ -316,6 +328,7 @@ class ReviewPreprocessor:
                     deletions=file.deletions,
                     changes=file.changes,
                     chunks=self.chunk_patch(
+                        file.filename,
                         file.patch,
                         language,
                     ),

@@ -7,6 +7,9 @@ from app.core.config import settings
 from app.core.database import db
 from app.routers.auth import router as auth_router
 from app.routers.github import router as github_router
+from app.routers.ai_review import (
+    router as ai_review_router,
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -37,6 +40,9 @@ app.add_middleware(
 # registers routers
 app.include_router(auth_router)
 app.include_router(github_router)
+app.include_router(
+    ai_review_router
+)
 
 @app.get("/")
 async def root():

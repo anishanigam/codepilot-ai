@@ -1,4 +1,5 @@
 from app.github.github_client import github_client
+from app.ai.models import GitHubFile
 
 class GitHubService:
 
@@ -87,7 +88,8 @@ class GitHubService:
         owner: str,
         repo: str,
         pull_number: int,
-    ):
+    ) -> list[GitHubFile]:
+
         files = await github_client.get_pull_request_files(
             access_token,
             owner,
@@ -96,16 +98,16 @@ class GitHubService:
         )
 
         return [
-            {
-                "filename": file["filename"],
-                "status": file["status"],
-                "additions": file["additions"],
-                "deletions": file["deletions"],
-                "changes": file["changes"],
-                "patch": file.get("patch"),
-            }
+            GitHubFile(
+                filename=file["filename"],
+                status=file["status"],
+                patch=file.get("patch"),
+                additions=file["additions"],
+                deletions=file["deletions"],
+                changes=file["changes"],
+            )
             for file in files
-    ]
+        ]
     
     
 

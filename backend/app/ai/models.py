@@ -10,6 +10,13 @@ class GitHubFile:
     deletions: int
     changes: int
 
+@dataclass(slots=True)
+class PatchChunk:
+    chunk_id: str
+    chunk_number: int
+    total_chunks: int
+    content: str
+
 @dataclass
 class ReviewableFile:
     filename: str
@@ -18,7 +25,7 @@ class ReviewableFile:
     additions: int
     deletions: int
     changes: int
-    chunks: list[str] = field(default_factory=list)
+    chunks: list[PatchChunk] = field(default_factory=list)
 
 
 @dataclass
