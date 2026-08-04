@@ -2,7 +2,9 @@ import httpx
 
 from app.core.config import settings
 from urllib.parse import urlencode
+from app.core.logger import get_logger
 
+logger = get_logger(__name__)
 
 class GitHubClient:
 
@@ -33,8 +35,9 @@ class GitHubClient:
         )
             
         except Exception as e:
-            print("EXCEPTION:", type(e).__name__)
-            print(e)
+            logger.exception(
+                "Failed to exchange GitHub OAuth code for access token."
+            ) 
             raise
 
         response.raise_for_status()

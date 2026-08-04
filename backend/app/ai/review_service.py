@@ -7,6 +7,7 @@ from app.ai.orchestrator.orchestrator import orchestrator
 from app.ai.postprocessor.finding_aggregator import (
     finding_aggregator,
 )
+from app.ai.postprocessor.summary_generator import summary_generator
 from app.ai.models import (
     GitHubFile,
     ReviewableFile,

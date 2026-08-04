@@ -23,6 +23,10 @@ class Settings(BaseSettings):
 
     FRONTEND_URL: str
 
+    AI_REQUEST_TIMEOUT: int = 20
+
+    AI_MAX_RETRIES: int = 2
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True
