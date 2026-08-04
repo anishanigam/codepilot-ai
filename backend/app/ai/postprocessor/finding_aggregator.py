@@ -9,7 +9,7 @@ from app.ai.postprocessor.models import (
 
 class FindingAggregator:
 
-    def merge(
+    def aggregate(
         self,
         result: OrchestratorResult,
     ) -> list[MergedFinding]:

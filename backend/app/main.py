@@ -10,6 +10,9 @@ from app.routers.github import router as github_router
 from app.routers.ai_review import (
     router as ai_review_router,
 )
+from app.core.logger import configure_logging
+
+configure_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

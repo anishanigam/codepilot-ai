@@ -22,7 +22,7 @@ class RuleEngine:
             return RuleEngineResult(
                 use_llm=True,
                 agents=[],
-                reason="No concepts detected.",
+                reason="No relevant concepts detected.",
             )
 
         selected_agents: set[AgentType] = set()

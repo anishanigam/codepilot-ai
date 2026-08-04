@@ -2,6 +2,9 @@ from pymongo import AsyncMongoClient
 from pymongo.asynchronous.database import AsyncDatabase
 
 from app.core.config import settings
+from app.core.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class DatabaseManager:
@@ -17,12 +20,12 @@ class DatabaseManager:
             settings.DATABASE_NAME
         ]
 
-        print("✅ MongoDB Connected")
+        logger.info("MongoDB Connected")
 
     async def disconnect(self):
         if self.client:
             await self.client.close()
-            print("❌ MongoDB Disconnected")
+            logger.info("MongoDB Disconnected")
 
 
 db = DatabaseManager()

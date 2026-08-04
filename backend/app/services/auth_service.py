@@ -1,6 +1,9 @@
 from app.github.github_client import github_client
 from app.repositories.user_repository import user_repository
 from app.core.security import create_access_token
+from app.core.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class AuthService:
@@ -23,19 +26,19 @@ class AuthService:
 
     async def authenticate_with_github(self, code: str,):
         token_data = await github_client.exchange_code_for_token(code)
-        print("✅ Token received")
+        logger.info("Token received")
 
         if "access_token" not in token_data:
             raise Exception(f"GitHub OAuth failed: {token_data}")
 
         access_token = token_data["access_token"]
 
-        print("Fetching GitHub user...")
+        logger.info("Fetching GitHub user...")
 
         github_user = await github_client.get_authenticated_user(
             access_token
         )
-        print("✅ User fetched")
+        logger.info("User fetched")
 
         github_scopes = await github_client.get_github_scopes(
         access_token

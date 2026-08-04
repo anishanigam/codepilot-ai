@@ -4,7 +4,7 @@ from app.ai.agents.models import (
     ReviewFinding,
 )
 
-from app.ai.common.enums import AgentType
+from app.ai.planner.models import AgentType
 
 
 @dataclass(slots=True)
