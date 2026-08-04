@@ -27,6 +27,8 @@ class Settings(BaseSettings):
 
     AI_MAX_RETRIES: int = 2
 
+    AI_MAX_CONCURRENT_TASKS: int = 4
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True

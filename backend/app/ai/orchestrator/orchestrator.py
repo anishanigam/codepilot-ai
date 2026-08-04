@@ -9,6 +9,7 @@ from app.ai.orchestrator.executor import (
 from app.ai.orchestrator.models import (
     OrchestratorResult,
 )
+from app.core.config import settings
 
 
 class Orchestrator:
@@ -17,13 +18,20 @@ class Orchestrator:
         self,
         tasks: list[ReviewTask],
     ) -> OrchestratorResult:
-        """
-        Execute all review tasks concurrently.
-        """
+        
+        semaphore = asyncio.Semaphore(
+            settings.AI_MAX_CONCURRENT_TASKS
+        )
 
+        async def execute_task(
+            task: ReviewTask,
+        ):
+            async with semaphore:
+                return await task_executor.execute(task)
+            
         execution_results  = await asyncio.gather(
             *[
-                task_executor.execute(task)
+                execute_task(task)
                 for task in tasks
             ],
             return_exceptions=True,

@@ -2,11 +2,12 @@ from app.ai.planner.models import (
     PlannerInput,
     DetectedConcept,
     Evidence,
-    ConceptType,
+    KeywordRule,
 )
 
 from app.ai.planner.mappings import (
     CONCEPT_KEYWORDS,
+    MAX_CONCEPT_WEIGHT,
 )
 
 import re
@@ -34,7 +35,7 @@ class ConceptDetector:
 
         for concept, keywords in CONCEPT_KEYWORDS.items():
 
-            evidence = self._build_evidence(
+            evidence, total_weight = self._build_evidence(
                 lower_lines,
                 keywords,
             )
@@ -43,7 +44,7 @@ class ConceptDetector:
                 continue
 
             confidence = self._calculate_confidence(
-                len(evidence)
+                total_weight,
             )
 
             detected.append(
@@ -60,64 +61,61 @@ class ConceptDetector:
     def _build_evidence(
         self,
         lines: list[str],
-        keywords: set[str],
-    ) -> list[Evidence]:
+        keywords: list[KeywordRule],
+    ) -> tuple[list[Evidence], float]:
         """
         Find all keyword occurrences inside the chunk.
-
-        Uses word-boundary regex matching to avoid
-        false positives like:
-
-            token     ❌ tokenizer
-            jwt       ❌ jwtManager
-            password  ❌ passwordHash
+        and accumulate their weights.
         """
 
         evidence: list[Evidence] = []
 
+        total_weight = 0.0
+        
         for line_number, line in enumerate(
             lines,
             start=1,
         ):
 
-            for keyword in keywords:
+            for rule in keywords:
 
                 pattern = (
-                    rf"\b{re.escape(keyword.lower())}\b"
+                    rf"\b{re.escape(rule.keyword.lower())}\b"
                 )
 
                 if re.search(pattern, line):
 
                     if not any(
-                        e.keyword == keyword
+                        e.keyword == rule.keyword
                         and e.line_number == line_number
                         for e in evidence
                     ):
 
                         evidence.append(
                             Evidence(
-                                keyword=keyword,
+                                keyword=rule.keyword,
                                 line_number=line_number,
                             )
                         )
 
-        return evidence
+                        total_weight += rule.weight
+
+        return evidence, total_weight
 
     def _calculate_confidence(
         self,
-        matches: int,
+        total_weight: float,
     ) -> float:
         """
-        Confidence heuristic.
+        Calculate confidence based on the total weight
+        of the matched keywords.
 
-        1 match  -> 0.33
-        2 matches -> 0.66
-        >=3 matches -> 1.0
+        Confidence is capped at 1.0.
         """
 
         return min(
-            matches / 3,
-            1.0,
+            total_weight,
+            MAX_CONCEPT_WEIGHT
         )
 
 
