@@ -3,7 +3,9 @@ from app.ai.preprocessor import preprocessor
 from app.ai.planner.planner import planner
 from app.ai.review_result import ReviewResult
 from app.ai.orchestrator.orchestrator import orchestrator
-
+from app.ai.summary.recommendation_engine import (
+    recommendation_engine,
+)
 from app.ai.postprocessor.finding_aggregator import (
     finding_aggregator,
 )
@@ -100,9 +102,8 @@ class ReviewService:
 
         summary = await summary_agent.generate(
             files=files,
-            merged_findings=merged_findings,
+            findings=merged_findings,
             recommendation=recommendation,
-            statistics=preprocessing_result.statistics,
         )
 
         

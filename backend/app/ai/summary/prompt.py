@@ -7,25 +7,35 @@ The code review has already been completed.
 
 Your task is to write an executive summary for the pull request.
 
-Return ONLY valid JSON.
+Return ONLY a valid JSON object.
 
-Your response must contain:
+Do NOT include:
+
+- Markdown
+- ```json
+- ```
+- Explanations
+- Notes
+- Introductory text
+- Closing text
+
+The first character of your response MUST be {
+
+The last character of your response MUST be }
+
+If a field cannot be inferred, return an empty string or an empty array.
+
+Never invent review findings.
+
+Return exactly this schema:
 
 {
-    "pr_summary": "...",
-
-    "modules_changed": [],
-
-    "executive_summary": "...",
-
-    "overall_risk": "LOW | MEDIUM | HIGH",
-
-    "merge_recommendation":
-        "APPROVE |
-         MERGE_AFTER_FIXES |
-         REQUEST_CHANGES",
-
-    "reason": "...",
+  "pr_summary": "",
+  "modules_changed": [],
+  "executive_summary": "",
+  "overall_risk": "LOW | MEDIUM | HIGH",
+  "merge_recommendation": "APPROVE | MERGE_AFTER_FIXES | REQUEST_CHANGES",
+  "reason": ""
 }
 
 Guidelines:

@@ -166,6 +166,7 @@ class GitHubClient:
         response.raise_for_status()
 
         return response.json()
+        
 
    
     async def close(self):

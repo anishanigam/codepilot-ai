@@ -3,7 +3,6 @@ import json
 from app.ai.llm import llm
 
 from app.ai.models import GitHubFile
-from app.ai.review_result import ReviewResult
 
 from app.ai.summary.prompt import SYSTEM_PROMPT
 from app.ai.summary.parser import summary_parser
@@ -34,12 +33,15 @@ class SummaryAgent:
             "findings": [
 
                 {
-                    "title": finding.title,
-                    "severity": finding.severity.value,
-                    "description": finding.description,
-                    "recommendation": finding.recommendation,
+                    "title": finding.finding.title,
+                    "severity": finding.finding.severity.value,
+                    "description": finding.finding.description,
+                    "recommendation": finding.finding.recommendation,
+                    "reported_by": [
+                        agent.value
+                        for agent in finding.reported_by
+                    ],
                 }
-
                 for finding in findings
             ],
             "recommendation": recommendation,
@@ -65,6 +67,11 @@ class SummaryAgent:
             ]
 
         )
+
+        print("=" * 80)
+        print("RAW SUMMARY RESPONSE")
+        print(repr(response.content))
+        print("=" * 80)
 
         return summary_parser.parse(
             response.content

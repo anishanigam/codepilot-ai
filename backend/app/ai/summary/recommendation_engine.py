@@ -15,7 +15,7 @@ class RecommendationEngine:
 
         for finding in findings:
 
-            severity = finding.severity.value
+            severity = finding.finding.severity.value
 
             if severity == "critical":
                 critical += 1
