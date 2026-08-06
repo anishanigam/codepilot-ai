@@ -5,17 +5,12 @@ from app.ai.models import (
     SkippedFile,
 )
 
-from app.ai.orchestrator.models import (
-    OrchestratorResult,
-)
-
 from app.ai.postprocessor.models import (
     MergedFinding,
 )
 
-from app.ai.postprocessor.models import (
-    MergedFinding,
-    ReviewSummary,
+from app.ai.summary.models import (
+    ExecutiveSummary,
 )
 
 
@@ -28,7 +23,7 @@ class ReviewResult:
         default_factory=list
     )
 
-    summary: ReviewSummary | None = None
+    summary: ExecutiveSummary | None = None
 
     merged_findings: list[MergedFinding] = field(
         default_factory=list

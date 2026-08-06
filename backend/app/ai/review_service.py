@@ -3,11 +3,15 @@ from app.ai.preprocessor import preprocessor
 from app.ai.planner.planner import planner
 from app.ai.review_result import ReviewResult
 from app.ai.orchestrator.orchestrator import orchestrator
-
+from app.ai.summary.recommendation_engine import (
+    recommendation_engine,
+)
 from app.ai.postprocessor.finding_aggregator import (
     finding_aggregator,
 )
-from app.ai.postprocessor.summary_generator import summary_generator
+from app.ai.summary.summary_agent import (
+    summary_agent,
+)
 from app.ai.models import (
     GitHubFile,
     ReviewableFile,
@@ -92,8 +96,14 @@ class ReviewService:
             orchestration_result
         )
 
-        summary = summary_generator.generate(
+        recommendation = recommendation_engine.recommend(
             merged_findings
+        )
+
+        summary = await summary_agent.generate(
+            files=files,
+            findings=merged_findings,
+            recommendation=recommendation,
         )
 
         
