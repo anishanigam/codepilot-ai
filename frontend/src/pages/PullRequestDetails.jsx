@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import api from "../services/api";
@@ -7,8 +7,8 @@ import { useState } from "react";
 
 function PullRequestDetails() {
   const { owner, repo, pullNumber } = useParams();
-  const [review, setReview] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { data: pr, isLoading } = useQuery({
     queryKey: ["pull-request", owner, repo, pullNumber],
@@ -33,18 +33,27 @@ function PullRequestDetails() {
   });
 
   const handleReview = async () => {
-    try {
-      setReviewLoading(true);
+  try {
+    setReviewLoading(true);
 
-      const result = await reviewPullRequest(owner, repo, pullNumber);
+    const result = await reviewPullRequest(
+      owner,
+      repo,
+      pullNumber
+    );
 
-      setReview(result);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setReviewLoading(false);
-    }
-  };
+    navigate("/review", {
+      state: {
+        review: result,
+        pr,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setReviewLoading(false);
+  }
+};
 
   if (isLoading) {
     return <h2>Loading pull request...</h2>;
@@ -142,16 +151,6 @@ function PullRequestDetails() {
         {reviewLoading ? "Reviewing..." : "🤖 Review with AI"}
       </button>
 
-      {/* Temporary Review JSON */}
-      {review && (
-        <div className="mt-8 rounded-lg border bg-gray-100 p-4">
-          <h3 className="mb-4 text-lg font-semibold">AI Review Response</h3>
-
-          <pre className="overflow-x-auto text-xs">
-            {JSON.stringify(review, null, 2)}
-          </pre>
-        </div>
-      )}
     </>
   );
 }

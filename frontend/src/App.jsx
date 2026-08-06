@@ -7,6 +7,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Repositories from "./pages/Repositories";
 import RepositoryDetails from "./pages/RepositoryDetails";
+import Review from "./pages/Review";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           path="/repositories/:owner/:repo/pulls/:pullNumber"
           element={<PullRequestDetails />}
         />
+        <Route path="/review" element={<Review />} />
       </Route>
     </Routes>
   );
