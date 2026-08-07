@@ -33,9 +33,11 @@ class FindingAggregator:
 
                 else:
 
-                    merged[key].reported_by.append(
-                        agent_result.agent
-                    )
+                    if (agent_result.agent not in merged[key].reported_by
+                    ):
+                        merged[key].reported_by.append(
+                            agent_result.agent
+                        )
 
         return list(
             merged.values()

@@ -1,9 +1,4 @@
-import {
-  AlertTriangle,
-  AlertCircle,
-  Info,
-  ShieldAlert,
-} from "lucide-react";
+import { AlertTriangle, AlertCircle, Info, ShieldAlert } from "lucide-react";
 
 function FindingCard({ finding }) {
   const severityConfig = {
@@ -25,20 +20,36 @@ function FindingCard({ finding }) {
     },
   };
 
-  const severity =
-    finding.finding.severity?.toUpperCase() || "LOW";
+  const severity = finding.finding.severity?.toUpperCase() || "LOW";
 
-  const current =
-    severityConfig[severity] || severityConfig.LOW;
+  const current = severityConfig[severity] || severityConfig.LOW;
 
+  const agentConfig = {
+    planner: {
+      label: "Planner",
+      icon: "⚡",
+    },
+    bug: {
+      label: "Bug",
+      icon: "🐞",
+    },
+    security: {
+      label: "Security",
+      icon: "🔒",
+    },
+    best_practices: {
+      label: "Best Practices",
+      icon: "📖",
+    },
+    performance: {
+      label: "Performance",
+      icon: "⚡",
+    },
+  };
   return (
     <div className="rounded-2xl border bg-white p-6 shadow-sm">
-
       <div className="flex items-center justify-between">
-
-        <h3 className="text-lg font-semibold">
-          {finding.finding.title}
-        </h3>
+        <h3 className="text-lg font-semibold">{finding.finding.title}</h3>
 
         <span
           className={`rounded-full border px-3 py-1 text-sm font-medium ${current.classes}`}
@@ -48,44 +59,39 @@ function FindingCard({ finding }) {
             {severity}
           </span>
         </span>
-
       </div>
 
-      <p className="mt-4 text-gray-700">
-        {finding.finding.description}
-      </p>
+      <p className="mt-4 text-gray-700">{finding.finding.description}</p>
 
       <div className="mt-5 rounded-lg bg-gray-50 p-4">
+        <h4 className="font-semibold">💡 Suggested Fix</h4>
 
-        <h4 className="font-semibold">
-          💡 Suggested Fix
-        </h4>
-
-        <p className="mt-2 text-gray-700">
-          {finding.finding.recommendation}
-        </p>
-
+        <p className="mt-2 text-gray-700">{finding.finding.recommendation}</p>
       </div>
 
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-
         <div className="text-sm text-gray-500">
           Lines: {finding.finding.line_start} - {finding.finding.line_end}
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {finding.reported_by.map((agent) => (
-            <span
-              key={agent}
-              className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700"
-            >
-              {agent}
-            </span>
-          ))}
+          {[...new Set(finding.reported_by)].map((agent) => {
+            const current = agentConfig[agent] || {
+              label: agent,
+              icon: "🤖",
+            };
+
+            return (
+              <span
+                key={agent}
+                className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700"
+              >
+                {current.icon} {current.label}
+              </span>
+            );
+          })}
         </div>
-
       </div>
-
     </div>
   );
 }

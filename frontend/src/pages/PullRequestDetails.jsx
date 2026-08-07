@@ -2,12 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import api from "../services/api";
-import { reviewPullRequest } from "../services/reviewService";
-import { useState } from "react";
 
 function PullRequestDetails() {
   const { owner, repo, pullNumber } = useParams();
-  const [reviewLoading, setReviewLoading] = useState(false);
   const navigate = useNavigate();
 
   const { data: pr, isLoading } = useQuery({
@@ -32,27 +29,15 @@ function PullRequestDetails() {
     },
   });
 
-  const handleReview = async () => {
-  try {
-    setReviewLoading(true);
-
-    const result = await reviewPullRequest(
+  const handleReview = () => {
+  navigate("/review", {
+    state: {
       owner,
       repo,
-      pullNumber
-    );
-
-    navigate("/review", {
-      state: {
-        review: result,
-        pr,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setReviewLoading(false);
-  }
+      pullNumber,
+      pr,
+    },
+  });
 };
 
   if (isLoading) {
@@ -144,12 +129,11 @@ function PullRequestDetails() {
       </div>
 
       <button
-        onClick={handleReview}
-        disabled={reviewLoading}
-        className="mt-8 rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800 disabled:opacity-50"
-      >
-        {reviewLoading ? "Reviewing..." : "🤖 Review with AI"}
-      </button>
+  onClick={handleReview}
+  className="mt-8 rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+>
+  🤖 Review with AI
+</button>
 
     </>
   );
