@@ -177,7 +177,7 @@ GROQ_MODEL=llama-3.3-70b-versatile
 ## 🚀 Run Locally
 1. Clone the repository
    ```bash
-   git clone https://github.com/<YOUR_USERNAME>/codepilot-ai.git
+   git clone https://github.com/<anishanigam>/codepilot-ai.git
    cd codepilot-ai
    ```
 2. Setup Backend
