@@ -1,18 +1,42 @@
 # CodePilot AI
 
-An autonomous multi-agent code review and refactoring platform powered by LangGraph, FastAPI, React, Docker and GitHub.
+> AI-powered multi-agent code review platform for GitHub Pull Requests.
 
-## Tech Stack
+CodePilot AI is an intelligent GitHub Pull Request review platform that uses a **planner-driven multi-agent AI architecture** to analyze code changes, identify potential issues, assess risk, and provide actionable recommendations to developers.
 
-- React
-- FastAPI
-- MongoDB
-- LangGraph
-- Docker
-- GitHub API
-- Python
+Instead of relying on a single AI agent to review an entire Pull Request, CodePilot uses specialized agents for different review responsibilities such as **bug detection, security, performance, and engineering best practices**.
 
-## Features 
+The system fetches Pull Requests directly from GitHub, analyzes changed files and diffs, intelligently routes review tasks to specialized AI agents, aggregates duplicate findings, evaluates the overall risk, generates an executive summary, and presents everything through an interactive React dashboard.
 
-- Generates Executive PR summary
-- Multi agents are present to identify the issues in the PR such as Bug agent, Performance agent, Style agent, BestPractices agent
+---
+
+## 🚀 Why CodePilot AI?
+
+Code reviews often produce a large number of individual comments without providing a clear understanding of the overall Pull Request.
+
+CodePilot focuses on answering three important questions:
+
+> **What changed?**
+
+> **What problems should I care about?**
+
+> **Can this Pull Request be merged?**
+
+The complete workflow is:
+
+```text
+Understand the PR
+       ↓
+Plan the Review
+       ↓
+Analyze with Specialized AI Agents
+       ↓
+Aggregate Findings
+       ↓
+Evaluate Risk
+       ↓
+Generate Recommendation
+       ↓
+Generate Executive Summary
+       ↓
+Human Review / Approval
