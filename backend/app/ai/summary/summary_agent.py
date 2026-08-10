@@ -24,7 +24,7 @@ class SummaryAgent:
                 {
                     "filename": file.filename,
                     "status": file.status,
-                    "patch": file.patch,
+                    "extension": file.filename.split(".")[-1],
                 }
 
                 for file in files
@@ -35,8 +35,6 @@ class SummaryAgent:
                 {
                     "title": finding.finding.title,
                     "severity": finding.finding.severity.value,
-                    "description": finding.finding.description,
-                    "recommendation": finding.finding.recommendation,
                     "reported_by": [
                         agent.value
                         for agent in finding.reported_by
@@ -46,6 +44,13 @@ class SummaryAgent:
             ],
             "recommendation": recommendation,
         }
+
+        payload_json = json.dumps(payload, indent=2)
+
+        print("=" * 80)
+        print("SUMMARY PAYLOAD SIZE")
+        print(len(payload_json))
+        print("=" * 80)
 
         response = await llm.ainvoke(
 

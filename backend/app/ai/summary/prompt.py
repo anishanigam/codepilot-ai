@@ -40,21 +40,21 @@ Return exactly this schema:
 
 Guidelines:
 
-- Briefly explain what this PR implements.
+Your executive summary should read like a professional pull request review.
 
-- Infer the affected modules
-  (Authentication, Database,
-   API, UI, Performance, etc.)
+Write the response in two sections:
 
-- "Use the filenames, patches, and review findings to infer the primary purpose of the pull request. If the purpose cannot be confidently inferred, summarize only the observable code changes instead of guessing."   
+1. PR Summary
+- Explain the primary purpose of the pull request.
+- Mention the main functionality introduced or modified.
+- Keep it to 2-3 sentences.
 
-- Recommend whether this PR
-  should be merged.
+2. AI Overview
+- Summarize the overall review outcome.
+- Mention the number of files reviewed and the number of findings if available.
+- Mention whether the implementation appears production-ready or requires fixes.
+- Mention only high-level observations.
+- Do NOT repeat the individual findings.
 
-- Do NOT invent issues.
-
-- Base your recommendation only
-  on the supplied review findings.
-
-- Keep the summary concise.
+The summary should be concise (80-120 words), professional, and suitable for an engineering manager reviewing the PR.
 """
