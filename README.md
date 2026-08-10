@@ -162,7 +162,7 @@ Reason
 High-severity findings should be addressed before merging.
 ```
 ---
-##Environment Variables
+## Environment Variables
 
 >Create a .env file inside the backend directory
 ```bash
@@ -174,7 +174,7 @@ GROQ_MODEL=llama-3.3-70b-versatile
 ```
 
 ---
-##🚀 Run Locally
+## 🚀 Run Locally
 1. Clone the repository
    ```bash
    git clone https://github.com/<YOUR_USERNAME>/codepilot-ai.git
@@ -184,66 +184,65 @@ GROQ_MODEL=llama-3.3-70b-versatile
    ```bash
    cd backend
    ```
-
-Create a virtual environment:
-```bash
-python -m venv .venv
-```
-
-Activate it on Windows:
-```bash
-.venv\Scripts\activate
-```
-
-For macOS/Linux:
-```bash
-source .venv/bin/activate
-```
-
-Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-Create your .env file and add the required credentials.
+   Create a virtual environment:
+    ```bash
+    python -m venv .venv
+    ```
+        
+   Activate it on Windows:
+   ```bash
+   .venv\Scripts\activate
+   ```
+        
+   For macOS/Linux:
+   ```bash
+   source .venv/bin/activate
+   ```
+        
+   Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   Create your .env file and add the required credentials.
 3. Start Backend
 
-Make sure you are inside the backend directory:
-```bash
-uvicorn app.main:app --reload
-```
-
-Backend will run at:
-```bash
-http://localhost:8000
-```
-
-FastAPI documentation:
-```bash
-http://localhost:8000/docs
-```
+   Make sure you are inside the backend directory:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+        
+   Backend will run at:
+   ```bash
+   http://localhost:8000
+   ```
+        
+   FastAPI documentation:
+   ```bash
+   http://localhost:8000/docs
+   ```
 
 4. Setup Frontend
 
-Open another terminal:
-```bash
-cd frontend
-```
+   Open another terminal:
+   ```bash
+   cd frontend
+   ```
 
-Install dependencies:
-```bash
-npm install
-```
-Start the development server:
-```bash
-npm run dev
-```
+   Install dependencies:
+   ```bash
+   npm install
+   ```
+   Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-The frontend will normally be available at:
-```bash
-http://localhost:5173
-```
----
-##🔒 Security
+   The frontend will normally be available at:
+   ```bash
+   http://localhost:5173
+   ```
+
+## 🔒 Security
 
 CodePilot uses GitHub OAuth for authentication and does not require users to provide their GitHub password.
 
