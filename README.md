@@ -23,7 +23,6 @@ Connect your GitHub account, select a repository and Pull Request, and let CodeP
 - 🚦 **Merge Recommendation** — Recommends APPROVE, MERGE_AFTER_FIXES, or REQUEST_CHANGES
 - 📝 **AI Executive Summary** — Generates a concise overview of the Pull Request
 - 📈 **Review Dashboard** — Displays statistics, findings, risk, modules, and recommendations
-- 👤 **Human-in-the-Loop** — AI-generated review results can be reviewed and approved by the user
 
 ---
 
