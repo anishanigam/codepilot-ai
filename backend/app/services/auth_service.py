@@ -26,7 +26,6 @@ class AuthService:
 
     async def authenticate_with_github(self, code: str,):
         token_data = await github_client.exchange_code_for_token(code)
-        logger.info("Token received")
 
         if "access_token" not in token_data:
             raise Exception(f"GitHub OAuth failed: {token_data}")
